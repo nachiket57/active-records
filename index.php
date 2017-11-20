@@ -40,7 +40,8 @@ class dbConn{
 								$model = new static::$modelName;
 				return $model;
 				}
-				static public function findAll() {
+				static public function findAll() 
+				{
 
 				$db = dbConn::getConnection();
 				$tab = get_called_class();
@@ -53,7 +54,10 @@ class dbConn{
 				
 				return $record;
 				}
-				static public function findOne($id) {
+
+
+				static public function findOne($id)
+				 {
 				$db = dbConn::getConnection();
 				$tab = get_called_class();
 				$sql = 'SELECT * FROM ' . $tab . ' WHERE id =' . $id;
@@ -65,4 +69,55 @@ class dbConn{
 				
 				return $record;
 				}
-				}		
+			}
+
+			class accounts extends collection {
+				protected static $modelName = 'accounts';
+				}
+						class todos extends collection {
+						protected static $modelName = 'todos';
+				}
+						class model {
+				
+							static $column;
+							static $value;
+							public function save()
+							{
+						
+						 (static::$id == '') {
+						$array = get_object_vars($this);
+						static::$column = implode(',', $array);
+						static::$value = implode(',', array_fill(0,count($array),'?'));
+						$db = dbConn::getConnection();
+						$sql = $this->insert();
+						$statement = $db->prepare($sql);
+						$statement->execute(static::$insertRow);
+						}
+						else
+						{
+						$db = dbConn::getConnection();
+						$sql = $this->update();
+						$statement = $db->prepare($sql);
+						$statement->execute();
+						}
+					
+						private function insert() {
+						$sql = "INSERT INTO ".static::$tab." (".self::$column.") VALUES (".static::$value.")";
+						return $sql;
+						}
+						private function update() {
+						$sql = "UPDATE ".static::$tab." SET ".static::$column." = '".static::$update."' WHERE id=".static::$id;
+						return $sql;
+						}
+						public function delete()
+						{
+						$db = dbConn::getConnection();
+						$sql = 'delete from '.static::$id.' where id='.static::$id;
+						$statement = $db->prepare($sql);
+						$statement->execute();
+						echo 'Column with Id '.static::$id.' has been deleted from todos';
+						}
+						}
+
+
+
